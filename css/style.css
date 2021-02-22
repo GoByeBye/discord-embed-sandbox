@@ -9,6 +9,21 @@ a.patreon-link {
   text-decoration: none;
 }
 
+.card-block {
+  background:#0B0B10;
+  color: #C6CEF1;
+}
+
+.card-header {
+  background: #13131D;
+  color: #FFFFF8;
+}
+
+.form-control {
+  background: #13131D;
+  color: #FFFFF8;
+}
+
 .badge-container {
   width: 100%;
   display: -webkit-box;
@@ -24,7 +39,7 @@ a.patreon-link {
   text-align: center;
 }
 .badge-container .badge-icon {
-  background: url("https://s3.amazonaws.com/patreon_public_assets/toolbox/patreon_white.png") center center no-repeat;
+  background: rgb(11, 11, 16);
   background-size: contain;
   width: 100%;
   height: 20px;
@@ -33,7 +48,7 @@ a.patreon-link {
   font-family: "Lato", sans-serif;
   font-size: 12px;
   padding: 2px;
-  color: #fff;
+  color: #0B0B10;
 }
 .badge-container .badge-text.badge-text-bottom {
   position: relative;
@@ -86,6 +101,8 @@ a.patreon-link {
   display: -ms-flexbox;
   display: flex;
   margin-bottom: 10px;
+  color: rgba(255, 255, 255, 0.6);
+  background: #36393e;
 }
 .embed a {
   color: #0096cf;

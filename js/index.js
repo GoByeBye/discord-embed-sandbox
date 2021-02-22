@@ -23,7 +23,7 @@ $(document).ready(function () {
     },
     description: '',
     url: '',
-    thumb_url: '',
+    thumbUrl: '',
     color: '',
     fields: [{}],
     footer: ''
@@ -39,14 +39,14 @@ $(document).ready(function () {
     resetEmbed();
 
     // add basic embed generation to source
-    source = 'embed=discord.Embed(';
+    source = 'const embed = require("discord-embed-maker")';
 
     if (embed.url) {
       $('.embed-inner').append('<div class="embed-title"><a href="' + embed.url + '">' + embed.title + '</a></div>');
 
       // update source
       if (switches.useVars) {
-        source += 'title=' + embed.title + ', url=' + embed.url;
+        source += '\nembed.setTitle' + embed.title + ', url=' + embed.url;
       } else {
         source += 'title="' + embed.title + '", url="' + embed.url + '"';
       }
@@ -95,15 +95,15 @@ $(document).ready(function () {
 
     if (embed.author.name) {
       // add author to source
-      source += 'embed.set_author(';
+      source += 'embed.setAuthor(';
 
       $('.embed-title').before('<div class="embed-author"><a class="embed-author-name" href="' + embed.author.url + '">' + embed.author.name + '</a></div>');
 
       // update source
       if (switches.useVars) {
-        source += 'name=' + embed.author.name;
+        source += embed.author.name;
       } else {
-        source += 'name="' + embed.author.name + '"';
+        source += '"' + embed.author.name + '"';
       }
 
       if(embed.author.url) {
@@ -133,18 +133,18 @@ $(document).ready(function () {
       source += ')\n';
     }
 
-    if (embed.thumb_url) {
+    if (embed.thumbUrl) {
       // add thumbnail
-      source += 'embed.set_thumbnail(';
+      source += 'embed.setThumbnail(';
 
-      $('.card.embed .card-block').append('<img class="embed-thumb" src="' + embed.thumb_url + '" />');
+      $('.card.embed .card-block').append('<img class="embed-thumb" src="' + embed.thumbUrl + '" />');
       $('.embed-thumb').height($('.embed-thumb')[0].naturalHeight);
 
       // update source
       if (switches.useVars) {
-        source += 'url=' + embed.thumb_url;
+        source += '"' + embed.thumbUrl;
       } else {
-        source += 'url="' + embed.thumb_url + '"';
+        source += '"' + embed.thumbUrl + '"';
       }
 
       // finish thumbnail
@@ -173,9 +173,9 @@ $(document).ready(function () {
 
       // add field
       if (switches.useVars) {
-        source += 'embed.add_field(name=' + field.name + ', value=' + field.value + ', inline=' + (field.inline && 'True' || 'False') + ')\n';
+        source += 'embed.addField(' + field.name + ', value=' + field.value + ', ' + (field.inline && 'true' || 'false') + ')\n';
       } else {
-        source += 'embed.add_field(name="' + field.name + '", value="' + field.value + '", inline=' + (field.inline && 'True' || 'False') + ')\n';
+        source += 'embed.addField("' + field.name + '", value="' + field.value + '", ' + (field.inline && 'true' || 'false') + ')\n';
       }
     }
 
@@ -184,14 +184,14 @@ $(document).ready(function () {
 
       // add footer
       if (switches.useVars) {
-        source += 'embed.set_footer(text=' + embed.footer + ')\n';
+        source += 'embed.setFooter(' + embed.footer + ')\n';
       } else {
-        source += 'embed.set_footer(text="' + embed.footer + '")\n';
+        source += 'embed.setFooter("' + embed.footer + '")\n';
       }
     }
 
     // add send function
-    source += 'await ctx.send(embed=embed)\n';
+    source += 'message.channel.send({embed});\n';
 
     // code
     $('.source').text(source);
@@ -276,7 +276,7 @@ $(document).ready(function () {
   }
 
   function updateThumb(value) {
-    embed.thumb_url = value || false;
+    embed.thumbUrl = value || false;
     updateEmbed(embed);
   }
 
@@ -314,22 +314,10 @@ $(document).ready(function () {
     e.preventDefault();
   });
 
-  // checking helpers
-  function addWarning(item, type, message) {
-    item.addClass('form-control-warning');
-    item.removeClass('form-control-success');
-    item.parent().addClass('has-warning');
-    item.parent().removeClass('has-success');
-    if ($('#' + type + '-feedback').length === 0) {
-      item.after('<div class="form-control-feedback" id="' + type + '-feedback">' + message + '</div>');
-    }
-  }
 
   function addSuccess(item, type) {
     item.removeClass('form-control-warning');
     item.addClass('form-control-success');
-    item.parent().addClass('has-success');
-    item.parent().removeClass('has-warning');
     $('#' + type + '-feedback').remove();
   }
 
